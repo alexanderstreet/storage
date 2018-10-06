@@ -22,7 +22,6 @@ abstract class SerializerTest extends PHPUnit_Framework_TestCase
             array(""),
             array("a"),
             array(array()),
-            array((object)array()),
         );
     }
 

@@ -26,13 +26,14 @@ class SerializerTest extends StorageDecorationTest
         $decoration = new Serialize($serializer);
 
         $entries = array('a' => 'A', 'b' => 'B');
+        $keys = array_keys($entries);
         $original = $entries;
 
         $decoration->beforePut($entries);
         self::assertNotEquals($original, $entries);
         self::assertEquals($original['a'], json_decode($entries['a']));
         self::assertEquals($original['b'], json_decode($entries['b']));
-        $decoration->afterGet($entries);
+        $decoration->afterGet($keys, $entries);
         self::assertEquals($original, $entries);
     }
 }

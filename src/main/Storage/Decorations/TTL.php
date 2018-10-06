@@ -84,7 +84,7 @@ class TTL extends AbstractStorageDecoration
         );
     }
 
-    public function afterGet(array &$entries)
+    public function afterGet(array &$keys, array &$entries)
     {
         $entries = array_map(
             array($this, 'value'),

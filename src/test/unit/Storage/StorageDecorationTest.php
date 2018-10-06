@@ -39,7 +39,7 @@ abstract class StorageDecorationTest extends PHPUnit_Framework_TestCase
         $decoration->afterPut($entries);
 
         $decoration->beforeGet($keys);
-        $decoration->afterGet($entries);
+        $decoration->afterGet($keys, $entries);
 
         self::assertEquals($this->entries, $entries);
     }

@@ -21,7 +21,7 @@ class Serialize extends AbstractStorageDecoration
         return $this->serializer;
     }
 
-    public function afterGet(array &$entries)
+    public function afterGet(array &$keys, array &$entries)
     {
         $entries = array_map(array($this->serializer, 'deserialize'), $entries);
     }

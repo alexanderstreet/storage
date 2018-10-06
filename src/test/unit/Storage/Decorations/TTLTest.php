@@ -40,6 +40,7 @@ class TTLTest extends StorageDecorationTest
         $decoration = new TTL();
         $entries = array('a' => 'A');
         $key = 'a';
+        $keys = array_keys($entries);
         $data = $entries;
         $decoration->beforePut($entries);
 
@@ -47,7 +48,7 @@ class TTLTest extends StorageDecorationTest
         self::assertArrayHasKey($decoration->valueKey(), $entries[$key]);
         self::assertEquals($data[$key], $decoration->value($entries[$key]));
 
-        $decoration->afterGet($entries);
+        $decoration->afterGet($keys, $entries);
         self::assertEquals($data, $entries);
     }
 

@@ -24,7 +24,7 @@ class StorageDecorator implements Storage
     {
         $this->decoration->beforeGet($keys);
         $entries = $this->storage->get($keys);
-        $this->decoration->afterGet($entries);
+        $this->decoration->afterGet($keys, $entries);
         return $entries;
     }
 

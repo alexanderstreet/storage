@@ -6,7 +6,7 @@ interface StorageDecoration
 {
     public function beforeGet(array &$keys);
 
-    public function afterGet(array &$entries);
+    public function afterGet(array &$keys, array &$entries);
 
     public function beforePut(array &$entries);
 

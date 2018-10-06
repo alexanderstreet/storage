@@ -10,7 +10,7 @@ class AbstractStorageDecoration implements StorageDecoration
     {
     }
 
-    public function afterGet(array &$entries)
+    public function afterGet(array &$keys, array &$entries)
     {
     }
 

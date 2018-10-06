@@ -14,61 +14,66 @@ class Composite extends AbstractStorageDecoration
     /**
      * @param StorageDecoration[] $decorations
      */
-    public function __construct($decorations)
+    public function __construct(array $decorations)
     {
         $this->decorations = $decorations;
     }
 
+    /**
+     * @return StorageDecoration[]
+     */
+    public function decorations()
+    {
+        return $this->decorations;
+    }
+
+    /**
+     * @return StorageDecoration[]
+     */
+    public function decorationsReversed()
+    {
+        return array_reverse($this->decorations());
+    }
+
     public function beforeGet(array &$keys)
     {
-        /**
-         * @var StorageDecoration $decoration
-         */
-        foreach (array_reverse($this->decorations) as $decoration) {
+        foreach ($this->decorationsReversed() as $decoration) {
             $decoration->beforeGet($keys);
         }
     }
 
-    public function afterGet(array &$entries)
+    public function afterGet(array &$keys, array &$entries)
     {
-        /**
-         * @var StorageDecoration $decoration
-         */
-        foreach (array_reverse($this->decorations) as $decoration) {
-            $decoration->afterGet($entries);
+        foreach ($this->decorationsReversed() as $decoration) {
+            $decoration->afterGet($keys, $entries);
         }
     }
 
     public function beforePut(array &$entries)
     {
-        foreach ($this->decorations as $decoration) {
+        foreach ($this->decorations() as $decoration) {
             $decoration->beforePut($entries);
         }
     }
 
     public function afterPut(array &$entries)
     {
-        foreach ($this->decorations as $decoration) {
+        foreach ($this->decorations() as $decoration) {
             $decoration->afterPut($entries);
         }
     }
 
     public function beforeDelete(array &$keys)
     {
-        foreach ($this->decorations as $decoration) {
+        foreach ($this->decorations() as $decoration) {
             $decoration->beforeDelete($keys);
         }
     }
 
     public function afterDelete(array &$keys)
     {
-        foreach ($this->decorations as $decoration) {
+        foreach ($this->decorations() as $decoration) {
             $decoration->afterDelete($keys);
         }
-    }
-
-    public function decorations()
-    {
-        return $this->decorations;
     }
 }
