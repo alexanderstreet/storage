@@ -15,25 +15,90 @@ class SerializerTest extends StorageDecorationTest
 
     public function testConstruct()
     {
-        $serializer = new JsonSerializer();
+        $serializer = self::getMockBuilder('Chemisus\\Serialization\\Serializer')->getMock();
         $decoration = new Serialize($serializer);
         self::assertEquals($serializer, $decoration->serializer());
     }
 
-    public function testSerializer()
+    public function testBeforeGet()
     {
-        $serializer = new JsonSerializer();
-        $decoration = new Serialize($serializer);
-
         $entries = array('a' => 'A', 'b' => 'B');
         $keys = array_keys($entries);
-        $original = $entries;
+
+        $serializer = self::getMockBuilder('Chemisus\\Serialization\\Serializer')->getMock();
+        $decoration = new Serialize($serializer);
+
+        $serializer->expects(self::never())->method('serialize');
+        $serializer->expects(self::never())->method('deserialize');
+
+        $decoration->beforeGet($keys);
+    }
+
+    public function testAfterGet()
+    {
+        $entries = array('a' => 'A', 'b' => 'B');
+        $keys = array_keys($entries);
+
+        $serializer = self::getMockBuilder('Chemisus\\Serialization\\Serializer')->getMock();
+        $decoration = new Serialize($serializer);
+
+        $serializer->expects(self::never())->method('serialize');
+        $serializer->expects(self::exactly(count($entries)))->method('deserialize');
+
+        $decoration->afterGet($keys, $entries);
+    }
+
+    public function testBeforePut()
+    {
+        $entries = array('a' => 'A', 'b' => 'B');
+
+        $serializer = self::getMockBuilder('Chemisus\\Serialization\\Serializer')->getMock();
+        $decoration = new Serialize($serializer);
+
+        $serializer->expects(self::exactly(count($entries)))->method('serialize')->withConsecutive(array('A'), array('B'));
+        $serializer->expects(self::never())->method('deserialize');
 
         $decoration->beforePut($entries);
-        self::assertNotEquals($original, $entries);
-        self::assertEquals($original['a'], json_decode($entries['a']));
-        self::assertEquals($original['b'], json_decode($entries['b']));
-        $decoration->afterGet($keys, $entries);
-        self::assertEquals($original, $entries);
+    }
+
+    public function testAfterPut()
+    {
+        $entries = array('a' => 'A', 'b' => 'B');
+
+        $serializer = self::getMockBuilder('Chemisus\\Serialization\\Serializer')->getMock();
+        $decoration = new Serialize($serializer);
+
+        $serializer->expects(self::never())->method('serialize');
+        $serializer->expects(self::never())->method('deserialize');
+
+        $decoration->afterPut($entries);
+    }
+
+    public function testBeforeDelete()
+    {
+        $entries = array('a' => 'A', 'b' => 'B');
+        $keys = array_keys($entries);
+
+        $serializer = self::getMockBuilder('Chemisus\\Serialization\\Serializer')->getMock();
+        $decoration = new Serialize($serializer);
+
+        $serializer->expects(self::never())->method('serialize');
+        $serializer->expects(self::never())->method('deserialize');
+
+        $decoration->beforeDelete($keys);
+    }
+
+    public function testAfterDelete()
+    {
+        $entries = array('a' => 'A', 'b' => 'B');
+        $keys = array_keys($entries);
+
+        $serializer = self::getMockBuilder('Chemisus\\Serialization\\Serializer')->getMock();
+        $decoration = new Serialize($serializer);
+
+        $serializer->expects(self::never())->method('serialize');
+        $serializer->expects(self::never())->method('deserialize');
+
+        $decoration->afterDelete($keys);
     }
 }
