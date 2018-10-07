@@ -2,24 +2,10 @@
 
 namespace Chemisus\Storage\Decorations;
 
-use Chemisus\Serialization\JsonSerializer;
-use Chemisus\Storage\StorageDecorationTest;
+use PHPUnit_Framework_TestCase;
 
-
-class SerializerTest extends StorageDecorationTest
+class SerializerTest extends PHPUnit_Framework_TestCase
 {
-    public function factory()
-    {
-        return new Serialize(new JsonSerializer());
-    }
-
-    public function testConstruct()
-    {
-        $serializer = self::getMockBuilder('Chemisus\\Serialization\\Serializer')->getMock();
-        $decoration = new Serialize($serializer);
-        self::assertEquals($serializer, $decoration->serializer());
-    }
-
     public function testBeforeGet()
     {
         $entries = array('a' => 'A', 'b' => 'B');
@@ -43,7 +29,8 @@ class SerializerTest extends StorageDecorationTest
         $decoration = new Serialize($serializer);
 
         $serializer->expects(self::never())->method('serialize');
-        $serializer->expects(self::exactly(count($entries)))->method('deserialize');
+        $serializer->expects(self::at(0))->method('deserialize')->with('A');
+        $serializer->expects(self::at(1))->method('deserialize')->with('B');
 
         $decoration->afterGet($keys, $entries);
     }
@@ -55,7 +42,8 @@ class SerializerTest extends StorageDecorationTest
         $serializer = self::getMockBuilder('Chemisus\\Serialization\\Serializer')->getMock();
         $decoration = new Serialize($serializer);
 
-        $serializer->expects(self::exactly(count($entries)))->method('serialize')->withConsecutive(array('A'), array('B'));
+        $serializer->expects(self::at(0))->method('serialize')->with('A');
+        $serializer->expects(self::at(1))->method('serialize')->with('B');
         $serializer->expects(self::never())->method('deserialize');
 
         $decoration->beforePut($entries);
