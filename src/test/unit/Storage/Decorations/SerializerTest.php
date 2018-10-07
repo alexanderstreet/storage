@@ -6,6 +6,14 @@ use PHPUnit_Framework_TestCase;
 
 class SerializerTest extends PHPUnit_Framework_TestCase
 {
+    public function testConstruct()
+    {
+        $serializer = self::getMockBuilder('Chemisus\\Serialization\\Serializer')->getMock();
+        $decoration = new Serialize($serializer);
+
+        self::assertEquals($serializer, $decoration->serializer());
+    }
+
     public function testBeforeGet()
     {
         $entries = array('a' => 'A', 'b' => 'B');
